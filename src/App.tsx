@@ -1,58 +1,63 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-function App() {
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from "@mui/material/Grid";
+import { RootState } from "./app/store";
+import SearchAppBar from "./components/SearchAppBar";
+import SearchTextCard from "./components/SearchTextCard";
+import { useGetMovieSearchQuery } from "./features/api/apiSlice";
+
+type Props = {};
+
+const App = (props: Props) => {
+  const lightTheme = createTheme({
+    palette: {
+      primary: {
+        main: "#0057b7",
+      },
+    },
+  });
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: "dark",
+    },
+  });
+  const [theme, setTheme] = useState("light");
+  const searchText = useSelector((state: RootState) => state.search.text);
+
+  const {
+    data: movieResults,
+    error,
+    isError,
+    isLoading,
+  } = useGetMovieSearchQuery(searchText);
+
+  const displayImagePosts = () => {
+    if (movieResults) {
+      return movieResults.results.map((movie: any) => <li>{movie.title}</li>);
+    } else {
+      return "Log in to view private posts.";
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
+      <CssBaseline />
+      <Box sx={{ flexGrow: 1, minWidth: 1 }} key="1">
+        <SearchAppBar />
+        <SearchTextCard />
+        <Grid container spacing={0}>
+          <Grid item xs={12}>
+            {displayImagePosts()}
+          </Grid>
+        </Grid>
+      </Box>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
