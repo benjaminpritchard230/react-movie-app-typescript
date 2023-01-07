@@ -88,8 +88,6 @@ const App = (props: Props) => {
     }
   };
 
-  const url =
-    "https://api.themoviedb.org/3/search/movie?api_key=9fb5564d1a088cb776b062fc755ea04e&language=en-US&query=harry&page=1&include_adult=false";
   return (
     <ThemeProvider theme={theme === "dark" ? darkTheme : lightTheme}>
       <CssBaseline />
