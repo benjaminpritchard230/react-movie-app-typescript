@@ -33,7 +33,9 @@ const SearchTextCard = (props: Props) => {
           sx={{ alignItems: "center", justifyContent: "end" }}
         >
           <Typography variant="h5" gutterBottom>
-            {searchText ? `Searching for ${searchText}...` : "Start searching"}
+            {searchText
+              ? `Searching for "${searchText}"...`
+              : "Start searching"}
           </Typography>
         </Stack>
       </CardContent>
